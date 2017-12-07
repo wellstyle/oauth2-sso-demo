@@ -1,5 +1,9 @@
 package com.example;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.catalina.filters.RequestDumperFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,17 +13,15 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.RequestEntity;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 @EnableOAuth2Sso
@@ -65,5 +67,10 @@ public class UiApplication {
     @Bean
     RequestDumperFilter requestDumperFilter() {
         return new RequestDumperFilter();
+    }
+    
+    @Bean
+    OAuth2RestTemplate oauth2RestTemplate(OAuth2ClientContext oauth2ClientContext, OAuth2ProtectedResourceDetails details) {
+        return new OAuth2RestTemplate(details, oauth2ClientContext);
     }
 }
